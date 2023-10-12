@@ -8,7 +8,7 @@ userRouter.post('/api/signin', userController.signin);
 userRouter.post('/api/signup', userController.signup);
 
 // get portfolio
-userRouter.get('/api/portfolio/get', userController.getPortfolio);
+userRouter.post('/api/portfolio/get', userController.getPortfolio);
 
 // add & delete to portfolio
 userRouter.post('/api/portfolio/append', userController.appendToPortfolio);

@@ -22,12 +22,12 @@ async function signup(req, res){
         //generating a salt
         bcrypt.genSalt(saltRounds, (err, salt)=>{
             if(err){
-                return res.status(403).json({message:'Error in user registration! '});
+                return res.status(403).json({error:'Error in user registration! '});
             }else{
                 //generating the hash
                 bcrypt.hash(password, salt, (err, hash)=>{
                     if(err){
-                        return res.status(403).json({message:'Error in user registration! '});
+                        return res.status(403).json({error:'Error in user registration! '});
                     }else{
                         password = hash;
                         userServices.createUser(name, email, password, res);
@@ -99,7 +99,19 @@ async function getPortfolio(req, res){
             return res.status(404).json({ error: "Invalid Email" });
         }
 
-        return res.status(200).json(result);
+        let totalInvst = 0;
+        let totalRate = 0;
+        result.portfolio.forEach(obj => {
+            totalInvst+= obj.value;
+            totalRate+= obj.rate;
+        })
+        const rate = parseFloat((totalRate/result.portfolio.length).toFixed(2));
+
+        return res.status(200).json({
+            'result': result,
+            'total': totalInvst,
+            'rate': rate ? rate : 0,
+        });
         
     }catch(err){
         return res.status(400).json({ error: err.message });
